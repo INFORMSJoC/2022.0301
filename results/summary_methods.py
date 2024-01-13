@@ -98,6 +98,18 @@ class DataFileInfo:
         lst.to_csv(self.results_path.joinpath("list_of_instances_solved_by_{}_not_{}.csv".format(solver1, solver2)))
         lst = self.all_instances_cg[(self.all_instances_cg['opt_' + solver1] == 0) & (self.all_instances_cg[ 'opt_' + solver2] == 1)]
         lst.to_csv(self.results_path.joinpath("list_of_instances_solved_by_{}_not_{}.csv".format(solver2, solver1)))
+    
+    def get_list_of_instances_solved_by_one_of_the_solvers(self):
+        if self.all_df is None:
+            self.calculate_df_all_opt()
+            self.calculate_all_df()
+        else:
+            print("The df_all_opt is already calculated")
+        
+        self.all_df[(self.all_df["opt"] == 1) &(self.all_df["OptFound"] == 0)].to_csv(self.results_path.joinpath("list_solved_by_bddf_not_atif.csv"))
+        self.all_df[(self.all_df["opt"] == 0)& (self.all_df["OptFound"] == 1)].to_csv(self.results_path.joinpath("list_solved_by_atif_not_bddf.csv"))
+        
+        
 
         
     
