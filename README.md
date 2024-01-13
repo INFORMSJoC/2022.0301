@@ -55,6 +55,29 @@ authors.
 
 ## Results
 
+### Column Generation Performance
+Computation time (in seconds) and number of instances solved at the
+root for the LP relaxation of TIF and ATIF
+![Figure 1](results/CG_results_ATIF_TIF.png)
+
+Computation time (in seconds) and number of instances solved at the
+root for the LP relaxation of BDDFr and BDDF
+![Figure 2](results/CG_results_BDDF.png)
+
+Size of the graph for TIF, ATIF, BDDFr , and BDDF
+![Figure 3](results/CG_results_size.png)
+
+Average and maxium gap from the starting solution for the formulations TIF,
+ATIF, BDDFr , and BDDF
+![Figure 4](results/CG_results_gap.png)
+
+### Comparison of BDDF and ATIF
+Performance profiles over all the instances solved to optimality by both
+algorithms. BDDF is the algorithm devised in this paper, while ATIF is the
+algorithm devised in [this paper](https://doi.org/10.1287/ijoc.2018.0854) by
+Oliveira, D. and Pessoa, A.
+![Figure 5](results/profile_overall_curve.png)
+
 ## Replicating
 
 ## Ongoing Development
