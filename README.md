@@ -88,8 +88,6 @@ to the paper for the description of the results.
 Summary of the results of BDDF with different initial solutions:
 ![Figure 6](results/variable_heuristic_results.png)
 
-## Replicating
-
 ## Ongoing Development
 
 This code is being developed on an on-going basis at the author's
