@@ -83,6 +83,11 @@ For a more detailed comparison, we also show the performance profiles for each
 pair of number of jobs and number of machines. For the sake of brevity, we refer
 to the paper for the description of the results.
 
+### Different starting solutions
+
+Summary of the results of BDDF with different initial solutions:
+![Figure 6](results/variable_heuristic_results.png)
+
 ## Replicating
 
 ## Ongoing Development
