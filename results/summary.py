@@ -41,3 +41,10 @@ data_file_info_exact.write_all_instances()
 
 
 # %%
+data_file_info = summary_methods.DataFileInfo("./results_2023_07_01.csv")
+
+# %%
+data_file_info.create_templates()
+# %%
+data_file_info.summary_variable_heuristic()
+# %%

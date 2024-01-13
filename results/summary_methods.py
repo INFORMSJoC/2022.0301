@@ -222,3 +222,24 @@ class DataFileInfo:
         # output = lst[['Inst', 'n', 'm', 'tot_bb', 'TimeOliveira', 'opt', 'OptFound']]
         output = lst[['Inst', 'n', 'm', 'tot_bb', 'TimeOliveira', 'opt', 'OptFound']]
         output.to_csv(self.results_path.joinpath("list_of_instance_only_solved_by_bdd.csv"), index=False)
+    
+    def summary_variable_heuristic(self):
+        grouped = self.data.groupby(['ijoc_review','n','m'])
+        lst = self.data['ijoc_review'].unique()
+        aggregation = {"tot_lb": {np.max, np.mean},
+                    "tot_lb_root": {np.max, np.mean},
+                    "gap": {np.max, np.mean},
+                    "first_size_graph": {np.max, np.mean},
+                    "size_after_reduced_cost": {np.max, np.mean},
+                    "opt": np.sum,
+                    "tot_bb": {np.max, np.mean},
+                    "reduction": {np.max, np.mean},
+                    "tot_cputime": {np.max, np.mean}}
+        summary_write = grouped.agg(aggregation).pivot_table(index=['n', 'm'], values=[
+            'tot_lb', 'tot_lb_root', 'size_after_reduced_cost', 'gap', 'first_size_graph', 'reduction', 'opt', 'tot_bb'], columns=['ijoc_review'])
+        summary_write.columns =  summary_write.columns.set_levels(
+            lst, level=2)
+        summary_write.columns = ["_".join(x) for x in summary_write.columns.ravel()]
+        summary_write.to_csv(self.results_path.joinpath(
+            "heuristic_variable_summary.csv"))
+        
