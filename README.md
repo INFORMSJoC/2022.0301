@@ -7,9 +7,10 @@ Computing](https://pubsonline.informs.org/journal/ijoc) under the [MIT License](
 
 The software and data in this repository are a snapshot of the software and data
 that were used in the research reported on in the paper 
-[This is a Template](https://doi.org/10.1287/ijoc.2019.0000) by T. Ralphs. 
-The snapshot is based on [this SHA](https://github.com/tkralphs/JoCTemplate/commit/f7f30c63adbcb0811e5a133e1def696b74f3ba15) 
-in the development repository. 
+[A flow-based formulation for parallel machine scheduling using decision
+diagrams](https://doi.org/10.1287/ijoc.2019.0000) by Daniel Kowalczyk, Roel
+Leus, Christopher Hojny and Stefan Røpke. 
+
 
 **Important: This code is being developed on an on-going basis at https://gitlab.kuleuven.be/u0056096/parallel-machine-bdd . Please go there if you would like to
 get a more recent version or would like support**
@@ -77,6 +78,10 @@ algorithms. BDDF is the algorithm devised in this paper, while ATIF is the
 algorithm devised in [this paper](https://doi.org/10.1287/ijoc.2018.0854) by
 Oliveira, D. and Pessoa, A.
 ![Figure 5](results/profile_overall_curve.png)
+
+For a more detailed comparison, we also show the performance profiles for each
+pair of number of jobs and number of machines. For the sake of brevity, we refer
+to the paper for the description of the results.
 
 ## Replicating
 

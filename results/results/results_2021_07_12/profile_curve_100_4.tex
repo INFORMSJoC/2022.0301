@@ -1,0 +1,67 @@
+% This file was created with tikzplotlib v0.10.1.
+\begin{tikzpicture}
+
+\definecolor{chocolate2267451}{RGB}{226,74,51}
+\definecolor{dimgray85}{RGB}{85,85,85}
+\definecolor{gainsboro229}{RGB}{229,229,229}
+\definecolor{lightgray204}{RGB}{204,204,204}
+\definecolor{steelblue52138189}{RGB}{52,138,189}
+
+\begin{axis}[
+axis background/.style={fill=gainsboro229},
+axis line style={white},
+legend cell align={left},
+legend style={
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(0.97,0.03)},
+  anchor=south east,
+  draw=lightgray204,
+  fill=gainsboro229
+},
+tick align=outside,
+tick pos=left,
+title={Performance profile for instances with \(\displaystyle m = 4\) and \(\displaystyle n = \)},
+x grid style={white},
+xlabel=\textcolor{dimgray85}{\(\displaystyle \tau\)},
+xmajorgrids,
+xmin=1, xmax=20,
+xtick style={color=dimgray85},
+y grid style={white},
+ylabel=\textcolor{dimgray85}{\(\displaystyle P(r_{p,s} \leq \tau)\)},
+ymajorgrids,
+ymin=-0.05, ymax=1.05,
+ytick style={color=dimgray85}
+]
+\addplot [semithick, chocolate2267451, const plot mark right]
+table {%
+1 0
+1 0.111111111111111
+1 0.222222222222222
+1 0.333333333333333
+1 0.444444444444444
+1 0.555555555555556
+1 0.666666666666667
+1.0853740212197 0.777777777777778
+1.41086514655895 0.888888888888889
+1.85879718952081 1
+};
+\addlegendentry{BDD}
+\addplot [semithick, steelblue52138189, const plot mark right]
+table {%
+1 0
+1 0.111111111111111
+1 0.222222222222222
+1.53096164314174 0.333333333333333
+3.27254366615513 0.444444444444444
+3.93807231081537 0.555555555555556
+5.88101012862903 0.666666666666667
+7.46856475482144 0.777777777777778
+22.8781421751424 0.888888888888889
+43.3309950280387 1
+};
+\addlegendentry{ATIF}
+\end{axis}
+
+\end{tikzpicture}
