@@ -28,8 +28,8 @@ Below is the BibTex for citing this snapshot of the repository.
   title =         {{A flow-based formulation for parallel machine scheduling
 	using decision diagrams}},
   year =          {2023},
-  doi =           {},
-  url =           {},
+  doi =           {10.1287/ijoc.2022.0301},
+  url =           {https://github.com/INFORMSJoC/2022.0301},
 }  
 ```
 
