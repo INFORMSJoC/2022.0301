@@ -8,7 +8,7 @@ Computing](https://pubsonline.informs.org/journal/ijoc) under the [MIT License](
 The software and data in this repository are a snapshot of the software and data
 that were used in the research reported on in the paper 
 [A flow-based formulation for parallel machine scheduling using decision
-diagrams](https://doi.org/10.1287/ijoc.2019.0000) by Daniel Kowalczyk, Roel
+diagrams](https://doi.org/10.1287/ijoc.2022.0301) by Daniel Kowalczyk, Roel
 Leus, Christopher Hojny and Stefan Røpke. 
 
 
@@ -22,7 +22,7 @@ To cite the contents of this repository, please cite both the paper and this rep
 Below is the BibTex for citing this snapshot of the repository.
 
 ```
-@article{CacheTest,
+@article{Kowalczyk2023,
   author =        {Daniel Kowalczyk, Roel Leus, Christopher Hojny, and Stefan R\o{}pke},
   publisher =     {INFORMS Journal on Computing},
   title =         {{A flow-based formulation for parallel machine scheduling
