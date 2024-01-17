@@ -1,0 +1,3 @@
+[submodule "src"]
+	path = src
+	url = https://gitlab.kuleuven.be/u0056096/parallel-machine-bdd
