@@ -1,4 +1,0 @@
-[submodule "parallel-machine-bdd"]
-	path = src
-	url = https://github.com/DanielKowalczyk1984/PM
-	tag = v0.1.4
