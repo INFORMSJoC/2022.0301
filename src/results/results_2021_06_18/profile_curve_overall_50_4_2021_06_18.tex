@@ -1,0 +1,73 @@
+% This file was created by tikzplotlib v0.9.8.
+\begin{tikzpicture}
+
+\definecolor{color0}{rgb}{0.12156862745098,0.466666666666667,0.705882352941177}
+\definecolor{color1}{rgb}{1,0.498039215686275,0.0549019607843137}
+
+\begin{axis}[
+legend cell align={left},
+legend style={
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(0.97,0.03)},
+  anchor=south east,
+  draw=white!80!black
+},
+tick align=outside,
+tick pos=left,
+title={Performance profile for instances with \(\displaystyle m = 4\) and \(\displaystyle n = \)},
+x grid style={white!69.0196078431373!black},
+xlabel={\(\displaystyle \tau\)},
+xmin=1, xmax=100,
+xtick style={color=black},
+y grid style={white!69.0196078431373!black},
+ylabel={\(\displaystyle P(r_{p,s} \leq \tau)\)},
+ymin=-0.05, ymax=1.05,
+ytick style={color=black}
+]
+\addplot [semithick, color0, const plot mark right]
+table {%
+1 0
+1 0.0625
+1 0.125
+1 0.1875
+1 0.25
+1 0.3125
+1 0.375
+1 0.4375
+1 0.5
+1 0.5625
+1 0.625
+1 0.6875
+1 0.75
+1 0.8125
+1 0.875
+1 0.9375
+1 1
+};
+\addlegendentry{BDD}
+\addplot [semithick, color1, const plot mark right]
+table {%
+1.27913727565364 0
+1.78000745178632 0.0625
+1.92658699358038 0.125
+2.23536729791643 0.1875
+2.3304154677937 0.25
+2.45024627838513 0.3125
+2.855496867163 0.375
+3.95086396376611 0.4375
+4.07555465593542 0.5
+5.18614843325618 0.5625
+5.46243905604483 0.625
+6.11341949302709 0.6875
+9.70364664066994 0.75
+11.6433906783407 0.8125
+16.5682305879397 0.875
+186.983869037334 0.9375
+221.729107928802 1
+};
+\addlegendentry{ATIF}
+\end{axis}
+
+\end{tikzpicture}

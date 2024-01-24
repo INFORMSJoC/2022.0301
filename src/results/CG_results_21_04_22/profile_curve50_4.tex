@@ -1,0 +1,75 @@
+% This file was created by tikzplotlib v0.9.8.
+\begin{tikzpicture}
+
+\definecolor{color0}{rgb}{0.12156862745098,0.466666666666667,0.705882352941177}
+\definecolor{color1}{rgb}{1,0.498039215686275,0.0549019607843137}
+
+\begin{axis}[
+legend cell align={left},
+legend style={
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(0.97,0.03)},
+  anchor=south east,
+  draw=white!80!black
+},
+tick align=outside,
+tick pos=left,
+title={Performance profile for instances with \(\displaystyle m = 4\) and \(\displaystyle n = 50\)},
+x grid style={white!69.0196078431373!black},
+xlabel={\(\displaystyle \tau\)},
+xmin=1, xmax=10,
+xtick style={color=black},
+y grid style={white!69.0196078431373!black},
+ylabel={\(\displaystyle P(r_{p,s} \leq \tau)\)},
+ymin=-0.05, ymax=1.05,
+ytick style={color=black},
+ytick={-0.2,0,0.2,0.4,0.6,0.8,1,1.2},
+yticklabels={\ensuremath{-}0.2,0.0,0.2,0.4,0.6,0.8,1.0,1.2}
+]
+\addplot [semithick, color0]
+table {%
+1 0
+1 0.0625
+1 0.125
+1 0.1875
+1 0.25
+1 0.3125
+1 0.375
+1 0.4375
+1 0.5
+1 0.5625
+1 0.625
+1 0.6875
+1 0.75
+1 0.8125
+1 0.875
+1 0.9375
+1 1
+};
+\addlegendentry{BDD}
+\addplot [semithick, color1]
+table {%
+1.44654559356207 0
+1.50261859269572 0.0625
+2.43552774383052 0.125
+4.91063679706917 0.1875
+5.2394748773729 0.25
+6.03105206197915 0.3125
+6.0384153260083 0.375
+6.62266981548572 0.4375
+6.96405450767606 0.5
+7.17320608528526 0.5625
+8.66012112120705 0.625
+10.4454491433907 0.6875
+11.9613415654289 0.75
+13.2450121442069 0.8125
+18.8732907284405 0.875
+35.0453590883409 0.9375
+276.664333179933 1
+};
+\addlegendentry{ATIF}
+\end{axis}
+
+\end{tikzpicture}

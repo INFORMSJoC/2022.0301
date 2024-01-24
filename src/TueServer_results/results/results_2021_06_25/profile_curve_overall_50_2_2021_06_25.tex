@@ -1,0 +1,80 @@
+% This file was created by tikzplotlib v0.9.8.
+\begin{tikzpicture}
+
+\definecolor{color0}{rgb}{0.886274509803922,0.290196078431373,0.2}
+\definecolor{color1}{rgb}{0.203921568627451,0.541176470588235,0.741176470588235}
+
+\begin{axis}[
+axis background/.style={fill=white!89.8039215686275!black},
+axis line style={white},
+legend cell align={left},
+legend style={
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(0.97,0.03)},
+  anchor=south east,
+  draw=white!80!black,
+  fill=white!89.8039215686275!black
+},
+tick align=outside,
+tick pos=left,
+title={Performance profile for instances with \(\displaystyle m = 2\) and \(\displaystyle n = \)},
+x grid style={white},
+xlabel={\(\displaystyle \tau\)},
+xmajorgrids,
+xmin=1, xmax=100,
+xtick style={color=white!33.3333333333333!black},
+y grid style={white},
+ylabel={\(\displaystyle P(r_{p,s} \leq \tau)\)},
+ymajorgrids,
+ymin=-0.05, ymax=1.05,
+ytick style={color=white!33.3333333333333!black}
+]
+\addplot [semithick, color0, const plot mark right]
+table {%
+1 0
+1 0.0588235294117647
+1 0.117647058823529
+1 0.176470588235294
+1 0.235294117647059
+1.1201600625 0.294117647058824
+1.20011512230216 0.352941176470588
+1.28832906 0.411764705882353
+1.52869259235669 0.470588235294118
+2.08146503225806 0.529411764705882
+2.38455422123894 0.588235294117647
+3.55879726027397 0.647058823529412
+3.66980314285714 0.705882352941177
+3.74136139336493 0.764705882352941
+4.86480894915254 0.823529411764706
+5.17257117197452 0.882352941176471
+13.7231508275862 0.941176470588235
+32.9523921235955 1
+};
+\addlegendentry{BDD}
+\addplot [semithick, color1, const plot mark right]
+table {%
+1 0
+1 0.0588235294117647
+1 0.117647058823529
+1 0.176470588235294
+1 0.235294117647059
+1 0.294117647058824
+1 0.352941176470588
+1 0.411764705882353
+1 0.470588235294118
+1 0.529411764705882
+1 0.588235294117647
+1 0.647058823529412
+1 0.705882352941177
+1.00633130379988 0.764705882352941
+1.0623935760973 0.823529411764706
+1.0844462039667 0.882352941176471
+1.48237186694044 0.941176470588235
+1.52992868346723 1
+};
+\addlegendentry{ATIF}
+\end{axis}
+
+\end{tikzpicture}

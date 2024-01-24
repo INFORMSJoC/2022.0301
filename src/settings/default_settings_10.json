@@ -1,0 +1,23 @@
+{
+	"bb_explore_strategy": "dfs",
+	"scoring_parameter": "WeightedProduct",
+	"scoring_value": 0,
+	"strong_branching": 10,
+	"bb_node_limit": 0,
+	"nb_iterations_rvnd": 10000,
+	"branching_cpu_limit": 7200.0,
+	"use_cpu_time": false,
+	"alpha": 0.8,
+	"branching_point": 0.7,
+	"pricing_solver": "BddBackwardCycle",
+	"use_heuristic": true,
+	"use_mip_solver": false,
+	"refine_bdd": false,
+	"enumerate": false,
+	"pruning_test": false,
+	"suboptimal_duals": false,
+	"reduce_cost_fixing": true,
+	"stab_technique": "WentgnesStab",
+	"print_csv": true,
+	"debug_lvl": -1
+}

@@ -1,0 +1,273 @@
+
+\documentclass{informs3-noredtextontop}
+\usepackage{enumerate}
+\usepackage{interval}
+\usepackage{float}
+\intervalconfig{left open fence= (,right open fence=)}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes,positioning}
+\usepackage{booktabs} % For \toprule, \midrule and \bottomrule
+\usepackage{pgfplotstable} % Generates table from .csv
+\usepackage[normalem]{ulem}
+\newcommand{\stkout}[1]{\ifmmode\text{\sout{\ensuremath{#1}}}\else\sout{#1}\fi}
+\usepackage{soul}
+\pgfplotsset{compat=newest}
+
+% Update article type if known
+% \papertype{Original Article}
+% \paperfield{Networks}
+
+% Data of csv files
+% \pgfplotstableread[col sep=comma]{data/new_results_pm.csv}\summarypm{}
+% \pgfplotstableread[col sep=comma]{data/results_tue2019_latex_overall.csv}\overallpm{}
+\pgfplotstableread[col sep=comma]{CG_summary_2022_08_25.csv}\summary{}
+% \pgfplotstableread[col sep=comma]{/home/daniel/CG_results_20191004/CG_allinstances_20191004.csv}\allinstances{}
+
+% \theoremstyle{TH}
+\newtheorem{property}{Property}
+\makeatletter
+\newcommand\footnoteref[1]{\protected@xdef{}\@thefnmark{\ref{#1}}\@footnotemark}
+\makeatother
+
+\title{A new formulation for parallel machine scheduling problems using ZDDs}
+
+% \author[1\authfn{1}]{Daniel Kowalczyk}
+% \author[2\authfn{2}]{Roel Leus}
+
+% % Include full affiliation details for all authors
+% \affil[1]{Combinatorial Optimization Group, Eindhoven University of Technology, Eindhoven, 5600 MB, The Netherlands}
+% \affil[2]{ORSTAT, KU Leuven, Leuven, Leuven, Belgium}
+
+% \corraddress{Roel Leus, ORSTAT, KU Leuven, Leuven, Leuven, Belgium}
+% \corremail{roel.leus@kuleuven.be}
+
+% \fundinginfo{Funder One, Funder One Department, Grant/Award Numbers: 123456 and 123458; Funder Two, Funder Two Department, Grant/Award Number: 123459}
+
+% % Include the name of the author that should appear in the running header
+% \runningauthor{Daniel Kowalczyk and Roel Leus}
+\begin{document}
+
+\begin{table}[H]
+	\TABLE{Summary of results for algorithms \textbf{TIF}, \textbf{ATIF}, \textbf{BDDF} and \textbf{BDDF-Simple}: computation time LP relaxation\label{tbl:summarytw}}{
+		\pgfplotstabletypeset[
+			columns={n,m,tot_lb_mean_TimeIndexed,tot_lb_amax_TimeIndexed,opt_sum_TimeIndexed,tot_lb_mean_ArcTimeIndexed,tot_lb_amax_ArcTimeIndexed,opt_sum_ArcTimeIndexed,tot_lb_mean_BddBackwardCycle,tot_lb_amax_BddBackwardCycle,opt_sum_BddBackwardCycle,tot_lb_mean_BddBackward,tot_lb_amax_BddBackward,opt_sum_BddBackward},
+			every head row/.style={
+					before row={%
+							\toprule
+							\multicolumn{2}{c}{}&  \multicolumn{3}{c}{\textbf{TIF}}& \multicolumn{3}{c}{\textbf{ATIF}} & \multicolumn{3}{c}{\textbf{BDDF}} & \multicolumn{3}{c}{\textbf{BDDF-Simple}} \\
+							\cmidrule(lr){3-5}\cmidrule(lr){6-8}\cmidrule(lr){9-11}\cmidrule(lr){12-14}
+						},
+					after row={\midrule},
+				},
+			columns/n/.style={column type=r,int detect,column name=n},
+			columns/m/.style={column type=r,int detect,column name=m},
+			columns/tot_lb_mean_TimeIndexed/.style={column type=r,fixed,precision=2,zerofill,column name=\emph{Avg sec}},
+			columns/tot_lb_mean_ArcTimeIndexed/.style={column type=r,precision=2,zerofill,fixed,column name=\emph{Avg sec}},
+			columns/tot_lb_mean_BddBackwardCycle/.style={column type=r,precision=2,zerofill,fixed,column name=\emph{Avg sec}},
+			columns/tot_lb_mean_BddBackward/.style={column type=r,precision=2,zerofill,fixed,column name=\emph{Avg sec}},
+			columns/tot_lb_amax_TimeIndexed/.style={column type=r,precision=2,zerofill,column name=\emph{Max sec}},
+			columns/tot_lb_amax_ArcTimeIndexed/.style={column type=r,precision=2,zerofill,fixed,column name=\emph{Max sec}},
+			columns/tot_lb_amax_BddBackwardCycle/.style={column type=r,precision=2,zerofill,fixed,column name=\emph{Max sec}},
+			columns/tot_lb_amax_BddBackward/.style={column type=r,precision=2,zerofill,fixed,column name=\emph{Max sec}},
+			columns/opt_sum_TimeIndexed/.style={column type=r,fixed,column name=\emph{\# opt}},
+			columns/opt_sum_ArcTimeIndexed/.style={column type=r,fixed,column name=\emph{\# opt}},
+			columns/opt_sum_BddBackwardCycle/.style={column type=r,fixed,column name=\emph{\# opt}},
+			columns/opt_sum_BddBackward/.style={column type=r,fixed,column name=\emph{\# opt}}
+		]\summary{}
+	}{}
+\end{table}
+
+\begin{table}[H]
+	\setlength{\tabcolsep}{4pt}
+	\TABLE{Summary of results for algorithms \textbf{TIF}, \textbf{ATIF} , \textbf{BDDF} and \textbf{BDDF-Simple}: gap\label{tbl:summarytw2}}{
+		\pgfplotstabletypeset[
+			columns={n,m,gap_mean_TimeIndexed,gap_amax_TimeIndexed,gap_mean_ArcTimeIndexed,gap_amax_ArcTimeIndexed,gap_mean_BddBackwardCycle,gap_amax_BddBackwardCycle,gap_mean_BddBackward,gap_amax_BddBackward},
+			every head row/.style={
+					before row={%
+							\toprule
+							\multicolumn{2}{c}{}&  \multicolumn{2}{c}{\textbf{TIF}}& \multicolumn{2}{c}{\textbf{ATIF}} & \multicolumn{2}{c}{\textbf{BDDF}} & \multicolumn{2}{c}{\textbf{BDDF-Simple}}\\
+							\cmidrule(lr){3-4}\cmidrule(lr){5-6}\cmidrule(lr){7-8}\cmidrule(lr){9-10}
+						},
+					after row={\midrule},
+				},
+			% font=\scriptsize,
+			columns/n/.style={column type=r,int detect,column name=n},
+			columns/m/.style={column type=r,int detect,column name=m},
+			columns/gap_mean_TimeIndexed/.style={multiply with=100,column type=r,precision=2,zerofill,column name=\emph{Avg gap\%}},
+			columns/gap_amax_TimeIndexed/.style={multiply with=100,column type=r,precision=2,zerofill,column name=\emph{Max gap\%}},
+			columns/gap_mean_ArcTimeIndexed/.style={multiply with=100,column type=r,precision=2,zerofill,fixed,column name=\emph{Avg gap\%}},
+			columns/gap_amax_ArcTimeIndexed/.style={multiply with=100,column type=r,precision=2,zerofill,fixed,column name=\emph{Max gap\%}},
+			columns/gap_mean_BddBackwardCycle/.style={multiply with=100,column type=r,precision=2,zerofill,fixed,column name=\emph{Avg gap\%}},
+			columns/gap_amax_BddBackwardCycle/.style={multiply with=100,column type=r,precision=2,zerofill,fixed,column name=\emph{Max gap\%}},
+			columns/gap_mean_BddBackward/.style={multiply with=100,column type=r,precision=2,zerofill,fixed,column name=\emph{Avg gap\%}},
+			columns/gap_amax_BddBackward/.style={multiply with=100,column type=r,precision=2,zerofill,fixed,column name=\emph{Max gap\%}}
+		]\summary{}
+
+	}{}
+\end{table}
+\begin{table}[H]
+	\centering
+	\TABLE
+	{Summary of results for algorithms \textbf{TIF}, \textbf{ATIF}, \textbf{BDDF} and \textbf{BDDF-Simple}: Size of graph\label{tbl:sizetw}}
+	{\pgfplotstabletypeset[
+			columns={n,m,first_size_graph_mean_TimeIndexed,first_size_graph_amax_TimeIndexed,first_size_graph_mean_ArcTimeIndexed,first_size_graph_amax_ArcTimeIndexed,first_size_graph_mean_BddBackwardCycle,first_size_graph_amax_BddBackwardCycle,reduction_mean_BddBackwardCycle,first_size_graph_mean_BddBackward,first_size_graph_amax_BddBackward,reduction_mean_BddBackward},
+			every head row/.style={
+					before row={%
+							\toprule
+							\multicolumn{2}{c}{}&  \multicolumn{2}{c}{\textbf{TIF}}& \multicolumn{2}{c}{\textbf{ATIF}} & \multicolumn{3}{c}{\textbf{BDDF}} & \multicolumn{3}{c}{\textbf{BDDF-Simple}}\\
+							\cmidrule(lr){3-4}\cmidrule(lr){5-6}\cmidrule(lr){7-9}\cmidrule(lr){10-12}
+						},
+					after row={\midrule},
+				},
+			% font=\scriptsize,
+			columns/n/.style={column type=r,int detect,column name=n},
+			columns/m/.style={column type=r,int detect,column name=m},
+			columns/first_size_graph_mean_TimeIndexed/.style={column type=r,fixed,precision=1,zerofill,column name=\emph{Avg Size}},
+			columns/first_size_graph_amax_TimeIndexed/.style={column type=r,fixed,column name=\emph{Max Size}},
+			columns/first_size_graph_mean_ArcTimeIndexed/.style={column type=r,precision=1,zerofill,fixed,column name=\emph{Avg Size}},
+			columns/first_size_graph_amax_ArcTimeIndexed/.style={column type=r,fixed,column name=\emph{Max Size}},
+			columns/first_size_graph_mean_BddBackwardCycle/.style={multiply with=2,column type=r,precision=1,zerofill,fixed,column name=\emph{Avg Size}},
+			columns/first_size_graph_amax_BddBackwardCycle/.style={multiply with=2,column type=r,precision=0,fixed,column name=\emph{Max Size}},
+			columns/reduction_mean_BddBackwardCycle/.style={multiply with=100,column type=r,precision=1,zerofill,fixed,column name=\emph{Avg Reduction (\%)}},
+			columns/first_size_graph_mean_BddBackward/.style={multiply with=2,column type=r,precision=1,zerofill,fixed,column name=\emph{Avg Size}},
+			columns/first_size_graph_amax_BddBackward/.style={multiply with=2,column type=r,precision=0,fixed,column name=\emph{Max Size}},
+			columns/reduction_mean_BddBackward/.style={multiply with=100,column type=r,precision=1,zerofill,fixed,column name=\emph{Avg Reduction (\%)}}
+		]\summary{}}{}
+\end{table}
+
+% \begin{table}[H]
+% 	\centering
+% 	\begin{threeparttable}
+% 		\caption{Summary of results for algorithms \textbf{TIF}, \textbf{ATIF} and \textbf{BDDF}: Size of graph}\label{tbl:sizetw}
+% 		\pgfplotstabletypeset[
+% 			columns={n,m,first_size_graph_mean_TimeIndexed,first_size_graph_amax_TimeIndexed,first_size_graph_mean_ArcTimeIndexed,first_size_graph_amax_ArcTimeIndexed,first_size_graph_mean_BddBackwardCycle,first_size_graph_amax_BddBackwardCycle,reduction_mean_BddBackwardCycle},
+% 			every head row/.style={
+% 					before row={%
+% 							\toprule
+% 							\multicolumn{2}{c}{}&  \multicolumn{2}{c}{\textbf{TIF}}& \multicolumn{2}{c}{\textbf{ATIF}} & \multicolumn{3}{c}{\textbf{BDDF}}\\
+% 							\cmidrule(lr){3-4}\cmidrule(lr){5-6}\cmidrule(lr){7-9}
+% 						},
+% 					after row={\midrule},
+% 				},
+% 			% font=\scriptsize,
+% 			columns/n/.style={column type=r,int detect,column name=n},
+% 			columns/m/.style={column type=r,int detect,column name=m},
+% 			columns/first_size_graph_mean_TimeIndexed/.style={column type=r,fixed,precision=1,zerofill,column name=\emph{Avg Size}},
+% 			columns/first_size_graph_amax_TimeIndexed/.style={column type=r,fixed,column name=\emph{Max Size}},
+% 			columns/first_size_graph_mean_ArcTimeIndexed/.style={column type=r,precision=1,zerofill,fixed,column name=\emph{Avg Size}},
+% 			columns/first_size_graph_amax_ArcTimeIndexed/.style={column type=r,fixed,column name=\emph{Max Size}},
+% 			columns/first_size_graph_mean_BddBackwardCycle/.style={multiply with=2,column type=r,precision=1,zerofill,fixed,column name=\emph{Avg Size}},
+% 			columns/first_size_graph_amax_BddBackwardCycle/.style={multiply with=2,column type=r,precision=0,fixed,column name=\emph{Max Size}},
+% 			columns/reduction_mean_BddBackwardCycle/.style={multiply with=100,column type=r,precision=1,zerofill,fixed,column name=\emph{Avg Reduction (\%)}}
+% 		]\summary{}
+% 	\end{threeparttable}
+% \end{table}
+
+
+% \begin{table}[H]
+% 	\centering
+% 	\begin{threeparttable}
+% 		\caption{Summary of results for algorithms \textbf{TIF}, \textbf{ATIF} and \textbf{BDDF}: computation time LP relaxation}\label{tbl:summarytw}
+% 		\pgfplotstabletypeset[
+% 			columns={n,m,tot_lb_mean_TimeIndexed,tot_lb_amax_TimeIndexed,opt_sum_TimeIndexed,tot_lb_mean_ArcTimeIndexed,tot_lb_amax_ArcTimeIndexed,opt_sum_ArcTimeIndexed,tot_lb_mean_BddBackwardCycle,tot_lb_amax_BddBackwardCycle,opt_sum_BddBackwardCycle},
+% 			every head row/.style={
+% 					before row={%
+% 							\toprule
+% 							\multicolumn{2}{c}{}&  \multicolumn{3}{c}{\textbf{TIF}}& \multicolumn{3}{c}{\textbf{ATIF}} & \multicolumn{3}{c}{\textbf{BDDF}}\\
+% 							\cmidrule(lr){3-5}\cmidrule(lr){6-8}\cmidrule(lr){9-11}
+% 						},
+% 					after row={\midrule},
+% 				},
+% 			columns/n/.style={column type=r,int detect,column name=n},
+% 			columns/m/.style={column type=r,int detect,column name=m},
+% 			columns/tot_lb_mean_TimeIndexed/.style={column type=r,fixed,precision=2,zerofill,column name=\emph{Avg sec}},
+% 			columns/tot_lb_amax_TimeIndexed/.style={column type=r,precision=2,zerofill,column name=\emph{Max sec}},
+% 			columns/opt_sum_TimeIndexed/.style={column type=r,fixed,column name=\emph{\# opt}},
+% 			columns/tot_lb_mean_ArcTimeIndexed/.style={column type=r,precision=2,zerofill,fixed,column name=\emph{Avg sec}},
+% 			columns/tot_lb_amax_ArcTimeIndexed/.style={column type=r,precision=2,zerofill,fixed,column name=\emph{Max sec}},
+% 			columns/opt_sum_ArcTimeIndexed/.style={column type=r,fixed,column name=\emph{\# opt}},
+% 			columns/tot_lb_mean_BddBackwardCycle/.style={column type=r,precision=2,zerofill,fixed,column name=\emph{Avg sec}},
+% 			columns/tot_lb_amax_BddBackwardCycle/.style={column type=r,precision=2,zerofill,fixed,column name=\emph{Max sec}},
+% 			columns/opt_sum_BddBackwardCycle/.style={column type=r,fixed,column name=\emph{\# opt}}
+% 		]\summary{}
+% 	\end{threeparttable}
+% \end{table}
+
+
+% \begin{table}[H]
+% 	\setlength{\tabcolsep}{4pt}
+% 	\centering
+% 	\begin{threeparttable}
+% 		\caption{Summary of results for algorithms \textbf{TIF}, \textbf{ATIF} and \textbf{BDDF}: gap}\label{tbl:summarytw2}
+% 		\pgfplotstabletypeset[
+% 			columns={n,m,gap_mean_TimeIndexed,gap_amax_TimeIndexed,gap_mean_ArcTimeIndexed,gap_amax_ArcTimeIndexed,gap_mean_BddBackwardCycle,gap_amax_BddBackwardCycle},
+% 			every head row/.style={
+% 					before row={%
+% 							\toprule
+% 							\multicolumn{2}{c}{}&  \multicolumn{2}{c}{\textbf{TIF}}& \multicolumn{2}{c}{\textbf{ATIF}} & \multicolumn{2}{c}{\textbf{BDDF}}\\
+% 							\cmidrule(lr){3-4}\cmidrule(lr){5-6}\cmidrule(lr){7-8}
+% 						},
+% 					after row={\midrule},
+% 				},
+% 			% font=\scriptsize,
+% 			columns/n/.style={column type=r,int detect,column name=n},
+% 			columns/m/.style={column type=r,int detect,column name=m},
+% 			columns/gap_mean_TimeIndexed/.style={multiply with=100,column type=r,precision=2,zerofill,column name=\emph{Avg gap\%}},
+% 			columns/gap_amax_TimeIndexed/.style={multiply with=100,column type=r,precision=2,zerofill,column name=\emph{Max gap\%}},
+% 			columns/gap_mean_ArcTimeIndexed/.style={multiply with=100,column type=r,precision=2,zerofill,fixed,column name=\emph{Avg gap\%}},
+% 			columns/gap_amax_ArcTimeIndexed/.style={multiply with=100,column type=r,precision=2,zerofill,fixed,column name=\emph{Max gap\%}},
+% 			columns/gap_mean_BddBackwardCycle/.style={multiply with=100,column type=r,precision=2,zerofill,fixed,column name=\emph{Avg gap\%}},
+% 			columns/gap_amax_BddBackwardCycle/.style={multiply with=100,column type=r,precision=2,zerofill,fixed,column name=\emph{Max gap\%}}
+% 		]\summary{}
+
+% 	\end{threeparttable}
+% \end{table}
+
+% \foreach \i/\j/\k in {2/40/a,4/40/b,2/50/c,4/50/d,2/100/e,4/100/f,2/150/g,4/150/h}{
+% 		\begin{table}[h]
+% 			\centering
+% 			\caption{Comparison of algorithms \textbf{TIF}, \textbf{ATIF} and \textbf{BDDF} with \(m = \i \) and \(n = \j \)}\label{tbl:tw\k}
+% 			\begin{threeparttable}
+% 				\pgfplotstabletypeset[
+% 					columns={Id,global_upper_bound_TimeIndexed,global_lower_bound_TimeIndexed,nb_generated_col_TimeIndexed,tot_lb_TimeIndexed,global_lower_bound_ArcTimeIndexed,nb_generated_col_ArcTimeIndexed,tot_lb_ArcTimeIndexed,global_lower_bound_BddBackwardCycle,nb_generated_col_BddBackwardCycle,tot_lb_BddBackwardCycle},
+% 					every head row/.style={
+% 							before row={%
+% 									\toprule
+% 									\multicolumn{2}{c}{}& \multicolumn{3}{c}{\textbf{TIF}} &  \multicolumn{3}{c}{\textbf{ATIF}} & \multicolumn{3}{c}{\textbf{BDDF}}\\
+% 									\cmidrule(lr){3-5}\cmidrule(lr){6-8}\cmidrule(lr){9-11}
+% 								},
+% 							after row={\midrule},
+% 						},
+% 					columns/Id/.style={column type=r,int detect,column name=\#\emph{id}},
+% 					columns/global_upper_bound_TimeIndexed/.style={column type=r,int detect,column name=\emph{UB}},
+% 					columns/global_lower_bound_TimeIndexed/.style={column type=r,int detect,column name=\emph{LB}},
+% 					columns/global_lower_bound_ArcTimeIndexed/.style={column type=r,int detect,column name=\emph{LB}},
+% 					columns/global_lower_bound_BddBackwardCycle/.style={column type=r,int detect,column name=\emph{LB}},
+% 					columns/nb_generated_col_TimeIndexed/.style={column type=r,int detect,column name=\#\emph{iter}},
+% 					columns/nb_generated_col_ArcTimeIndexed/.style={column type=r,int detect,column name=\#\emph{iter}},
+% 					columns/nb_generated_col_BddBackwardCycle/.style={column type=r,int detect,column name=\#\emph{iter}},
+% 					columns/tot_lb_BddBackwardCycle/.style={column type=r,fixed,precision=1,zerofill,column name=\emph{sec}},
+% 					columns/tot_lb_TimeIndexed/.style={column type=r,fixed,precision=1,zerofill,column name=\emph{sec}},
+% 					columns/tot_lb_ArcTimeIndexed/.style={column type=r,fixed,precision=1,zerofill,column name=\emph{sec}},
+% 					row predicate/.code={
+% 							\pgfplotstablegetelem{##1}{n}\of{\allinstances}
+% 							\pgfmathsetmacro{\xn}{\pgfplotsretval}
+% 							\ifnum\xn=\j
+% 								\pgfplotstablegetelem{##1}{m}\of{\allinstances}
+% 								\pgfmathsetmacro{\yn}{\pgfplotsretval}
+% 								\ifnum\yn=\i
+% 								\else
+% 									\pgfplotstableuserowfalse{}
+% 								\fi
+% 							\else
+% 								\pgfplotstableuserowfalse{}
+% 							\fi
+% 						}
+% 				]\allinstances
+% 			\end{threeparttable}
+% 		\end{table}
+% 	}
+
+\end{document}
