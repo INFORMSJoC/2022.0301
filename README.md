@@ -19,16 +19,20 @@ get a more recent version or would like support**
 
 To cite the contents of this repository, please cite both the paper and this repo, using their respective DOIs.
 
+https://doi.org/10.1287/ijoc.2022.0301
+
+https://doi.org/10.1287/ijoc.2022.0301.cd
+
 Below is the BibTex for citing this snapshot of the repository.
 
 ```
-@article{Kowalczyk2023,
+@article{Kowalczyk2024,
   author =        {Daniel Kowalczyk, Roel Leus, Christopher Hojny, and Stefan R\o{}pke},
   publisher =     {INFORMS Journal on Computing},
   title =         {{A flow-based formulation for parallel machine scheduling
 	using decision diagrams}},
-  year =          {2023},
-  doi =           {10.1287/ijoc.2022.0301},
+  year =          {2024},
+  doi =           {10.1287/ijoc.2022.0301.cd},
   url =           {https://github.com/INFORMSJoC/2022.0301},
 }  
 ```
