@@ -1,0 +1,21 @@
+{
+  "name": "parallel-machine-bdd",
+  "version": "0.1.0",
+  "dependencies": [
+    "fmt",
+    "docopt",
+    "nlohmann-json",
+    "range-v3",
+    "boost-chrono",
+    "boost-atomic",
+    "boost-timer",
+    "boost-random",
+    "boost-regex",
+    "boost-serialization",
+    "boost-graph",
+    "boost-multiprecision",
+    "or-utils",
+    "moderndd",
+    "modernbb"
+  ]
+}

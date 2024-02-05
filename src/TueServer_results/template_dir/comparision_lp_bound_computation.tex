@@ -1,0 +1,205 @@
+\documentclass{informs3-noredtextontop}
+\usepackage{enumerate}
+\usepackage{interval}
+\usepackage{float}
+\intervalconfig{left open fence= (,right open fence=)}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{standalone}
+\usepackage[style=base]{subcaption}
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes,positioning,decorations.pathreplacing,calc}
+\usepackage{booktabs} % For \toprule, \midrule and \bottomrule
+\usepackage{pgfplotstable} % Generates table from .csv
+\usepackage[normalem]{ulem}
+\newcommand{\stkout}[1]{\ifmmode\text{\sout{\ensuremath{#1}}}\else\sout{#1}\fi}
+\usepackage{soul}
+\usepackage{xcolor}
+\pgfplotsset{compat=newest}
+
+
+% Data of csv files
+\pgfplotstableread[col sep=comma]{CG_summary.csv}\summary{}
+
+% \theoremstyle{TH}
+\newtheorem{property}{Property}
+\newtheorem{prop}{Proposition}
+\makeatletter
+\newcommand\footnoteref[1]{\protected@xdef{}\@thefnmark{\ref{#1}}\@footnotemark}
+\makeatother
+
+\OneAndAHalfSpacedXII% current default line spacing
+%%\DoubleSpacedXII
+
+% Natbib setup for author-year style
+\usepackage{natbib}
+%\bibpunct[, ]{}{}{,}{a}{}{,}%
+ \def\bibfont{\small}%
+ \def\bibsep{\smallskipamount}%
+ \def\bibhang{24pt}%
+ \def\newblock{\ }%
+ \def\BIBand{and}%
+%% Setup of theorem styles. Comment out only one.
+%% Preferred default is the first option.
+\TheoremsNumberedThrough% Preferred (Theorem 1, Lemma 1, Theorem 2)
+%\TheoremsNumberedByChapter  % (Theorem 1.1, Lemma 1.1, Theorem 1.2)
+
+%% Setup of the equation numbering system. Comment out only one.
+%% Preferred default is the first option.
+\EquationsNumberedThrough% Default: (1), (2), ...
+%\EquationsNumberedBySection % (1.1), (1.2), ...
+
+% In the reviewing and copy editing stage enter the manuscript number.
+%\MANUSCRIPTNO{} % When the article is logged in and DOI assigned to it,
+                 %   this manuscript number is no longer necessary
+
+%%%%%%%%%%%%%%%%
+
+\newcommand{\TWCT}{P||\sum_{j = 1}^n
+w_jC_j}
+
+\newcommand{\TWCTm}{P_m||\sum_{j = 1}^n
+w_jC_j}
+
+\theoremstyle{TH}
+
+% Initialize data
+\renewcommand{\theARTICLETOP}{}
+\renewcommand{\RRHSecondLine}{}
+\renewcommand{\LRHSecondLine}{}
+\renewcommand{\theARTICLETOPRIGHT}{}
+\renewcommand{\setoddRH}{\hbox to \textwidth{\fs.7.8.\tabcolsep0pt
+  \begin{tabular*}{\textwidth}[b]{l@{\extracolsep\fill}r}
+  {\theRRHFirstLine}&  \raisebox{0pt}[0pt][0pt]{\fs.10.10.\thepage}\\[-4pt]
+  \rlap{\VRHDW{0.5pt}{0pt}{\textwidth}}&\\
+  \end{tabular*}}}
+\renewcommand{\setevenRH}{
+	\hbox to \textwidth{\fs.7.8.\tabcolsep0pt
+	  \begin{tabular*}{\textwidth}[b]{l@{\extracolsep\fill}r}
+	   \raisebox{0pt}[0pt][0pt]{\fs.10.10.\thepage}&{\theLRHFirstLine}\\[-4pt]
+	  \rlap{\VRHDW{0.5pt}{0pt}{\textwidth}}&\\
+	  \end{tabular*}}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% command definitions    %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand*{\red}{\textcolor{red}}
+\newcommand*{\green}{\textcolor{green}}
+\newcommand*{\blue}{\textcolor{blue}}
+
+\begin{document}
+\begin{table}[t]
+	\TABLE{Size of the graph for TIF, ATIF, BDDF$_r$, and BDDF \label{tbl:sizetw}}{
+
+
+		\pgfplotstabletypeset[
+			columns={n,m,first_size_graph_mean_TimeIndexed,first_size_graph_max_TimeIndexed,reduction_mean_TimeIndexed,first_size_graph_mean_ArcTimeIndexed,first_size_graph_max_ArcTimeIndexed,reduction_mean_ArcTimeIndexed,first_size_graph_mean_BddBackwardCycle,first_size_graph_max_BddBackwardCycle,reduction_mean_BddBackwardCycle,reduction_mean_BddBackward},
+			every head row/.style={
+					before row={%
+							\toprule
+							\multicolumn{2}{c}{}&  \multicolumn{3}{c}{TIF}& \multicolumn{3}{c}{ATIF} & \multicolumn{3}{c}{BDDF$_r$}& \multicolumn{1}{c}{BDDF}\\
+							\cmidrule(lr){3-5}\cmidrule(lr){6-8}\cmidrule(lr){9-11}\cmidrule(lr){12-12}
+						},
+					after row={\midrule},
+				},
+           every last row/.style={after row=\bottomrule},
+			% font=\scriptsize,
+			columns/n/.style={column type=r,int detect,column name=\textit{n}},
+			columns/m/.style={column type=r,int detect,column name=\textit{m}},
+			columns/first_size_graph_mean_TimeIndexed/.style={column type=r,fixed,precision=1,zerofill,column name=\emph{avg size}},
+			columns/first_size_graph_max_TimeIndexed/.style={column type=r,fixed,column name=\emph{max size}},
+			columns/reduction_mean_TimeIndexed/.style={multiply with=100,column type=r,precision=1,zerofill,fixed,postproc cell content/.append style={  /pgfplots/table/@cell content/.add={}{\%},} ,column name=\emph{avg red}},
+			columns/first_size_graph_mean_ArcTimeIndexed/.style={column type=r,precision=1,zerofill,fixed,column name=\emph{avg size}},
+			columns/first_size_graph_max_ArcTimeIndexed/.style={column type=r,fixed,column name=\emph{max size}},
+			columns/reduction_mean_ArcTimeIndexed/.style={multiply with=100,column type=r,precision=1,zerofill,fixed,postproc cell content/.append style={  /pgfplots/table/@cell content/.add={}{\%},} ,column name=\emph{avg red}},
+		columns/first_size_graph_mean_BddBackward/.style={multiply with=2,column type=r,precision=1,zerofill,fixed,column name=\emph{avg size}},
+			columns/first_size_graph_max_BddBackward/.style={multiply with=2,column type=r,precision=0,fixed,column name=\emph{max size}},
+			columns/reduction_mean_BddBackward/.style={multiply with=100,column type=r,precision=1,zerofill,fixed,postproc cell content/.append style={  /pgfplots/table/@cell content/.add={}{\%},} ,column name=\emph{avg red}},
+			columns/first_size_graph_mean_BddBackwardCycle/.style={multiply with=2,column type=r,precision=1,zerofill,fixed,column name=\emph{avg size}},
+			columns/first_size_graph_max_BddBackwardCycle/.style={multiply with=2,column type=r,precision=0,fixed,column name=\emph{max size}},
+			columns/reduction_mean_BddBackwardCycle/.style={multiply with=100,column type=r,precision=1,zerofill,fixed,postproc cell content/.append style={  /pgfplots/table/@cell content/.add={}{\%},} ,column name=\emph{avg red}}
+                        % postproc ... tot \%},} ingevoegd om percentage-teken achteraan toe te voegen
+		]\summary{}
+	}{}
+\end{table}
+
+\begin{table}[t]
+	\TABLE{Computation time (in seconds) and number of instances solved at the root for the LP relaxation of TIF and ATIF\label{tbl:summarytw1}}{
+		\pgfplotstabletypeset[
+			columns={n,m,tot_lb_mean_TimeIndexed,tot_lb_max_TimeIndexed,opt_sum_TimeIndexed,tot_lb_mean_ArcTimeIndexed,tot_lb_max_ArcTimeIndexed,opt_sum_ArcTimeIndexed},
+			every head row/.style={
+					before row={%
+							\toprule
+							\multicolumn{2}{c}{}&  \multicolumn{3}{c}{TIF}& \multicolumn{3}{c}{ATIF}\\
+							\cmidrule(lr){3-5}\cmidrule(lr){6-8}
+						},
+					after row={\midrule},
+				},
+         every last row/.style={after row=\bottomrule},
+ 			columns/n/.style={column type=r,int detect,column name=\textit{n}},
+			columns/m/.style={column type=r,int detect,column name=\textit{m}},
+			columns/tot_lb_mean_TimeIndexed/.style={column type=r,fixed,precision=2,zerofill,column name=\emph{avg time}},
+			columns/tot_lb_max_TimeIndexed/.style={column type=r,precision=2,zerofill,column name=\emph{max time}},
+			columns/opt_sum_TimeIndexed/.style={column type=r,fixed,column name=\emph{\# opt}},
+			columns/tot_lb_mean_ArcTimeIndexed/.style={column type=r,precision=2,zerofill,fixed,column name=\emph{avg time}},
+			columns/tot_lb_max_ArcTimeIndexed/.style={column type=r,precision=2,zerofill,fixed,column name=\emph{max time}},
+			columns/opt_sum_ArcTimeIndexed/.style={column type=r,fixed,column name=\emph{\# opt}}
+		]\summary{}
+	}{}
+\end{table}
+
+\begin{table}[t]
+	\TABLE{Computation time (in seconds) and number of instances solved at the root for the LP relaxation of BDDF$_r$ and BDDF\label{tbl:summarytw2}}{
+		\pgfplotstabletypeset[
+			columns={n,m,tot_lb_mean_BddBackwardCycle,tot_lb_max_BddBackwardCycle,opt_sum_BddBackwardCycle,tot_lb_mean_BddBackward,tot_lb_max_BddBackward,opt_sum_BddBackward},
+			every head row/.style={
+					before row={%
+							\toprule
+							\multicolumn{2}{c}{}&  \multicolumn{3}{c}{BDDF$_r$} & \multicolumn{3}{c}{BDDF}\\
+							\cmidrule(lr){3-5}\cmidrule(lr){6-8}
+						},
+					after row={\midrule},
+				},
+         every last row/.style={after row=\bottomrule},
+ 			columns/n/.style={column type=r,int detect,column name=\textit{n}},
+			columns/m/.style={column type=r,int detect,column name=\textit{m}},
+			columns/tot_lb_mean_BddBackward/.style={column type=r,precision=2,zerofill,fixed,column name=\emph{avg time}},
+			columns/tot_lb_max_BddBackward/.style={column type=r,precision=2,zerofill,fixed,column name=\emph{max time}},
+			columns/opt_sum_BddBackward/.style={column type=r,fixed,column name=\emph{\# opt}},
+			columns/tot_lb_mean_BddBackwardCycle/.style={column type=r,precision=2,zerofill,fixed,column name=\emph{avg time}},
+			columns/tot_lb_max_BddBackwardCycle/.style={column type=r,precision=2,zerofill,fixed,column name=\emph{max time}},
+			columns/opt_sum_BddBackwardCycle/.style={column type=r,fixed,column name=\emph{\# opt}}
+		]\summary{}
+	}{}
+\end{table}
+
+\begin{table}[t]
+	% \setlength{\tabcolsep}{4pt}
+	\TABLE{Average and maxium gap from the starting solution for the formulations TIF, ATIF, BDDF$_r$, and BDDF\label{tbl:summarytw3}}{
+		\pgfplotstabletypeset[
+			columns={n,m,gap_mean_TimeIndexed,gap_max_TimeIndexed,gap_mean_ArcTimeIndexed,gap_max_ArcTimeIndexed,gap_mean_BddBackwardCycle,gap_max_BddBackwardCycle,gap_mean_BddBackward,gap_max_BddBackward},
+			every head row/.style={
+					before row={%
+							\toprule
+							\multicolumn{2}{c}{}&  \multicolumn{2}{c}{TIF}& \multicolumn{2}{c}{ATIF} & \multicolumn{2}{c}{BDDF$_r$} & \multicolumn{2}{c}{BDDF}\\
+							\cmidrule(lr){3-4}\cmidrule(lr){5-6}\cmidrule(lr){7-8}\cmidrule(lr){9-10}
+						},
+					after row={\midrule},
+				},
+           every last row/.style={after row=\bottomrule},
+ 			% font=\scriptsize,
+			columns/n/.style={column type=r,int detect,column name=\textit{n}},
+			columns/m/.style={column type=r,int detect,column name=\textit{m}},
+			columns/gap_mean_TimeIndexed/.style={multiply with=100,column type=r,precision=2,zerofill,postproc cell content/.append style={  /pgfplots/table/@cell content/.add={}{\%},}, column name=\emph{avg}},
+			columns/gap_max_TimeIndexed/.style={multiply with=100,column type=r,precision=2,zerofill,postproc cell content/.append style={  /pgfplots/table/@cell content/.add={}{\%},}, column name=\emph{max}},
+			columns/gap_mean_ArcTimeIndexed/.style={multiply with=100,column type=r,precision=2,zerofill,postproc cell content/.append style={  /pgfplots/table/@cell content/.add={}{\%},}, fixed,column name=\emph{avg}},
+			columns/gap_max_ArcTimeIndexed/.style={multiply with=100,column type=r,precision=2,zerofill,postproc cell content/.append style={  /pgfplots/table/@cell content/.add={}{\%},}, fixed,column name=\emph{max}},
+			columns/gap_mean_BddBackward/.style={multiply with=100,column type=r,precision=2,zerofill,fixed,postproc cell content/.append style={  /pgfplots/table/@cell content/.add={}{\%},}, column name=\emph{avg}},
+			columns/gap_max_BddBackward/.style={multiply with=100,column type=r,precision=2,zerofill,fixed,postproc cell content/.append style={  /pgfplots/table/@cell content/.add={}{\%},}, column name=\emph{max}},
+			columns/gap_mean_BddBackwardCycle/.style={multiply with=100,column type=r,precision=2,zerofill,fixed,postproc cell content/.append style={  /pgfplots/table/@cell content/.add={}{\%},}, column name=\emph{avg}},
+			columns/gap_max_BddBackwardCycle/.style={multiply with=100,column type=r,precision=2,zerofill,fixed,postproc cell content/.append style={  /pgfplots/table/@cell content/.add={}{\%},}, column name=\emph{max}}
+		]\summary{}
+
+	}{}
+\end{table}
+\end{document}

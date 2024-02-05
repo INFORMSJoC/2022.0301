@@ -1,0 +1,147 @@
+\documentclass{informs3-noredtextontop}
+\usepackage{enumerate}
+\usepackage{interval}
+\usepackage{float}
+\intervalconfig{left open fence= (,right open fence=)}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{standalone}
+\usepackage[style=base]{subcaption}
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes,positioning,decorations.pathreplacing,calc}
+\usepackage{booktabs} % For \toprule, \midrule and \bottomrule
+\usepackage{pgfplotstable} % Generates table from .csv
+\usepackage[normalem]{ulem}
+\newcommand{\stkout}[1]{\ifmmode\text{\sout{\ensuremath{#1}}}\else\sout{#1}\fi}
+\usepackage{soul}
+\usepackage{xcolor}
+\pgfplotsset{compat=newest}
+
+
+% Data of csv files
+\pgfplotstableread[col sep=comma]{TUE_server_results.csv}\allinstances{}
+
+% \theoremstyle{TH}
+\newtheorem{property}{Property}
+\newtheorem{prop}{Proposition}
+\makeatletter
+\newcommand\footnoteref[1]{\protected@xdef{}\@thefnmark{\ref{#1}}\@footnotemark}
+\makeatother
+
+\OneAndAHalfSpacedXII% current default line spacing
+%%\DoubleSpacedXII
+
+% Natbib setup for author-year style
+\usepackage{natbib}
+%\bibpunct[, ]{}{}{,}{a}{}{,}%
+ \def\bibfont{\small}%
+ \def\bibsep{\smallskipamount}%
+ \def\bibhang{24pt}%
+ \def\newblock{\ }%
+ \def\BIBand{and}%
+%% Setup of theorem styles. Comment out only one.
+%% Preferred default is the first option.
+\TheoremsNumberedThrough% Preferred (Theorem 1, Lemma 1, Theorem 2)
+%\TheoremsNumberedByChapter  % (Theorem 1.1, Lemma 1.1, Theorem 1.2)
+
+%% Setup of the equation numbering system. Comment out only one.
+%% Preferred default is the first option.
+\EquationsNumberedThrough% Default: (1), (2), ...
+%\EquationsNumberedBySection % (1.1), (1.2), ...
+
+% In the reviewing and copy editing stage enter the manuscript number.
+%\MANUSCRIPTNO{} % When the article is logged in and DOI assigned to it,
+                 %   this manuscript number is no longer necessary
+
+%%%%%%%%%%%%%%%%
+
+\newcommand{\TWCT}{P||\sum_{j = 1}^n
+w_jC_j}
+
+\newcommand{\TWCTm}{P_m||\sum_{j = 1}^n
+w_jC_j}
+
+\theoremstyle{TH}
+
+% Initialize data
+\renewcommand{\theARTICLETOP}{}
+\renewcommand{\RRHSecondLine}{}
+\renewcommand{\LRHSecondLine}{}
+\renewcommand{\theARTICLETOPRIGHT}{}
+\renewcommand{\setoddRH}{\hbox to \textwidth{\fs.7.8.\tabcolsep0pt
+  \begin{tabular*}{\textwidth}[b]{l@{\extracolsep\fill}r}
+  {\theRRHFirstLine}&  \raisebox{0pt}[0pt][0pt]{\fs.10.10.\thepage}\\[-4pt]
+  \rlap{\VRHDW{0.5pt}{0pt}{\textwidth}}&\\
+  \end{tabular*}}}
+\renewcommand{\setevenRH}{
+	\hbox to \textwidth{\fs.7.8.\tabcolsep0pt
+	  \begin{tabular*}{\textwidth}[b]{l@{\extracolsep\fill}r}
+	   \raisebox{0pt}[0pt][0pt]{\fs.10.10.\thepage}&{\theLRHFirstLine}\\[-4pt]
+	  \rlap{\VRHDW{0.5pt}{0pt}{\textwidth}}&\\
+	  \end{tabular*}}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% command definitions    %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand*{\red}{\textcolor{red}}
+\newcommand*{\green}{\textcolor{green}}
+\newcommand*{\blue}{\textcolor{blue}}
+
+\begin{document}
+\section{Detailed computational results for the B\&P procedure based on BDDF} \label{app:details}
+In the following tables (Table \ref{tbl:twa} to \ref{tbl:twf}) we include the detailed computational results of our  B\&P procedure based on BDDF for each tested instance.  An instance is solved to guaranteed optimality if and only if \mbox{\emph{LB} = \emph{UB}}\@. The information provided in the different columns is as follows:
+\begin{itemize}
+\item \#\emph{id} = instance ID number
+\item \emph{UB} = best found upper bound (best solution)
+\item \emph{LB root} = lower bound in the root node of the B\&B search tree
+\item \emph{LB} = best found (global) lower bound
+\item \#\emph{iter} = total number of CG iterations across all nodes in the search tree
+\item \#\emph{iter root} =number of CG iterations in the root node
+\item \#\emph{nodes}  = number of nodes in the B\&B search tree \red{(excluding the root node)}
+\item \emph{time LP} = CPU time (in seconds) for solving the LPs in all nodes
+\item \emph{time LP root} = CPU time (in seconds) for solving the LP in the root node
+\item \emph{time} = total CPU time (in seconds)
+\end{itemize}
+
+\foreach\i/\j/\k in {2/40/a,4/40/b,2/50/c,4/50/d,2/100/e,4/100/f}{
+                               \begin{table}[h]
+                                               \centering
+                                               \caption{B\&P results per instance for \(m = \i \) and \(n = \j \)}\label{tbl:tw\k}
+                                               \pgfplotstabletypeset[
+                                               columns={Inst,global_upper_bound_AFBC,global_lowerbound_root_AFBC,global_lower_bound_AFBC,nb_generated_col_AFBC,nb_generated_col_root_AFBC,nb_nodes_explored_AFBC,tot_lb_AFBC,tot_lb_root_AFBC,tot_bb_AFBC},
+                                                               every head row/.style={
+                                                                                              before row={%
+                                                                                                                              \toprule
+                                                                                                              },
+                                                                                              after row={\midrule},
+                                                                               },
+                                               every last row/.style={after row=\bottomrule},
+                                                               columns/Inst/.style={column type=r,int detect,column name=\#\emph{id}},
+                                                               columns/global_upper_bound_AFBC/.style={column type=r,int detect,column name=\emph{UB}},
+                                                               columns/global_lowerbound_root_AFBC/.style={column type=r,int detect,column name=\emph{LB root}},
+                                                               columns/global_lower_bound_AFBC/.style={column type=r,int detect,column name=\emph{LB}},
+                                                               columns/nb_generated_col_root_AFBC/.style={column type=r,int detect,column name=\#\emph{iter root}},
+                                                               columns/nb_nodes_explored_AFBC/.style={column type=r,int detect,column name=\#\emph{nodes}},
+                                                               columns/nb_generated_col_AFBC/.style={column type=r,int detect,column name=\#\emph{iter}},
+                                                               columns/tot_lb_AFBC/.style={multiply with=0.7,column type=r,fixed,precision=2,zerofill,column name=\emph{time LP}},
+                                                               columns/tot_lb_root_AFBC/.style={multiply with=0.7,column type=r,fixed,precision=2,zerofill,column name=\emph{time LP root}},
+                                                               columns/tot_bb_AFBC/.style={multiply with=0.7,column type=r,fixed,precision=2,zerofill,column name=\emph{time}},
+                                                               row predicate/.code={
+                                                                                              \pgfplotstablegetelem{##1}{n}\of{\allinstances}
+                                                                                              \pgfmathsetmacro{\xn}{\pgfplotsretval}
+                                                                                              \ifnum\xn=\j
+                                                                                                              \pgfplotstablegetelem{##1}{m}\of{\allinstances}
+                                                                                                              \pgfmathsetmacro{\yn}{\pgfplotsretval}
+                                                                                                              \ifnum\yn=\i
+                                                                                                              \else
+                                                                                                                              \pgfplotstableuserowfalse{}
+                                                                                                              \fi
+                                                                                              \else
+                                                                                                              \pgfplotstableuserowfalse{}
+                                                                                              \fi
+                                                                               }
+                                               ]\allinstances{}
+
+                               \end{table}
+                }
+\end{document}

@@ -1,0 +1,16 @@
+{
+  "name": "or-utils",
+  "version": "2018-11-01",
+  "description": "Some utils files",
+  "homepage": "https://gitlab.kuleuven.be/u0056096/or-utils.git",
+  "dependencies": [
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    }
+  ]
+}

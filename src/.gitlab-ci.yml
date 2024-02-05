@@ -1,0 +1,37 @@
+
+stages:
+  - build
+  
+.build:linux:base:
+  stage: build
+  image: ubuntu:21.04
+  cache:
+    paths:
+      - ThirdParty/vcpkg
+      - ThirdParty/coin-or-x64-linux-debug
+      - ThirdParty/coin-or-x64-linux-release
+      - ThirdParty/gurobi
+    key: "$CI_JOB_NAME-$CI_COMMIT_REF_SLUG"
+  variables:
+    BUILDDIR: "build"
+  before_script:
+    - apt-get update && apt-get install -y locales && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+    - export LANG=en_US.utf8
+    - export DEBIAN_FRONTEND=noninteractive
+    - apt-get --no-install-recommends -y install gpg-agent software-properties-common dirmngr apt-transport-https lsb-release ca-certificates
+    - add-apt-repository -y ppa:ubuntu-toolchain-r/test
+    - apt-get --no-install-recommends -y install ${BB_CI_CC_COMPILER} ${BB_CI_CXX_COMPILER} clang-format libssl-dev git gcc g++ wget curl make ninja-build pkg-config python3 python3-pip tar unzip zip libgfortran-10-dev libblas-dev liblapack-dev libmetis-dev libnauty2-dev
+    - pip install cmake
+    - chmod u+x before_script.sh && ./before_script.sh
+  script:
+    - export GUROBI_HOME=$(pwd)/ThirdParty/gurobi/linux64
+    - mkdir -p ${BUILDDIR}
+    - cmake -DCMAKE_C_COMPILER=${BB_CI_CC_COMPILER} -DCMAKE_CXX_COMPILER=${BB_CI_CXX_COMPILER} -DCMAKE_BUILD_TYPE=Release -B ${BUILDDIR} -S . -DCMAKE_TOOLCHAIN_FILE=./ThirdParty/vcpkg/scripts/buildsystems/vcpkg.cmake -G "Ninja"
+    - cmake --build ${BUILDDIR} --config Debug -j 4
+
+build:linux:gcc:
+  extends: .build:linux:base
+  variables:    
+    BB_CI_CXX_COMPILER: "g++-11"
+    BB_CI_CC_COMPILER: "gcc-11"
+
